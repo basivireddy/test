@@ -1,0 +1,1656 @@
+---
+# Source: ibm-odm-prod/templates/dbserver-network-policy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: odm-prod-release-odm-dbserver-network-policy
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  podSelector:
+    matchLabels:
+      run: odm-prod-release-dbserver
+  ingress:
+  # Allow web access to the UI
+  - ports:
+    - port: 9463
+  # Allow inbound connections from DC, DR, DSC and DSR pods
+  - from:
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisioncenter
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisionrunner
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisionserverconsole
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisionserverruntime
+---
+# Source: ibm-odm-prod/templates/dc-network-policy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: odm-prod-release-odm-dc-network-policy
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  podSelector:
+    matchLabels:
+      run: odm-prod-release-odm-decisioncenter
+  ingress:
+  # Allow web access to the UI
+  - ports:
+    - port: 9453
+---
+# Source: ibm-odm-prod/templates/default-network-policy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: odm-prod-release-odm-default-network-policy
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  podSelector:
+    matchLabels:
+      release: "odm-prod-release"
+      app: ibm-odm-prod
+  # Deny all ingress traffic by default
+  policyTypes:
+  - Ingress
+---
+# Source: ibm-odm-prod/templates/dr-network-policy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: odm-prod-release-odm-dr-network-policy
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  podSelector:
+    matchLabels:
+      run: odm-prod-release-odm-decisionrunner
+  ingress:
+  # Allow web access to the UI
+  - ports:
+    - port: 9443
+    
+  # Allow inbound connections from DC and DSC pods
+  - from:
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisioncenter
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisionserverconsole
+---
+# Source: ibm-odm-prod/templates/dsc-network-policy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: odm-prod-release-odm-ds-console-network-policy
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  podSelector:
+    matchLabels:
+      run: odm-prod-release-odm-decisionserverconsole
+  ingress:
+  # Allow web access to the UI
+  - ports:
+    - port: 9443
+    
+    - port: 1883
+  # Allow inbound connections from DC, DR and DSR pods
+  - from:
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisioncenter
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisionrunner
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisionserverruntime
+---
+# Source: ibm-odm-prod/templates/dsr-network-policy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: odm-prod-release-odm-ds-runtime-network-policy
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  podSelector:
+    matchLabels:
+      run: odm-prod-release-odm-decisionserverruntime
+  ingress:
+  # Allow web access to the UI
+  - ports:
+    - port: 9443
+    
+  # Allow inbound connections from DSC pod
+  - from:
+    - podSelector:
+        matchLabels:
+          run: odm-prod-release-odm-decisionserverconsole
+---
+# Source: ibm-odm-prod/templates/dc-jvm-options-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-dc-jvm-options-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dc-jvm-options: "-Duser.timezone=Europe/Paris"
+---
+# Source: ibm-odm-prod/templates/dc-logging-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-dc-logging-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dc-logging: "<server>\n\t<logging traceFileName=\"stdout\" traceFormat=\"BASIC\" traceSpecification=\"*=audit:org.apache.solr.*=warning:com.ibm.rules.bdsl.search.solr.*=warning\" consoleLogLevel=\"INFO\"/>\n</server>"
+---
+# Source: ibm-odm-prod/templates/dr-jvm-options-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-dr-jvm-options-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dr-jvm-options: "-Duser.timezone=Europe/Paris"
+---
+# Source: ibm-odm-prod/templates/dr-logging-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-dr-logging-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dr-logging: "<server>\n\t<logging traceFileName=\"stdout\" traceFormat=\"BASIC\" traceSpecification=\"*=audit:com.ibm.rules.*=info:ilog.rules.*=info\" consoleLogLevel=\"INFO\"/>\n</server>"
+---
+# Source: ibm-odm-prod/templates/ds-console-jvm-options-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-ds-console-jvm-options-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dsc-jvm-options: "-Duser.timezone=Europe/Paris"
+---
+# Source: ibm-odm-prod/templates/ds-console-logging-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-ds-console-logging-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dsc-logging: "<server>\n\t<logging traceFileName=\"stdout\" traceFormat=\"BASIC\" traceSpecification=\"*=audit:com.ibm.rules.*=info:ilog.rules.*=info\" consoleLogLevel=\"INFO\"/>\n</server>"
+---
+# Source: ibm-odm-prod/templates/ds-runtime-jvm-options-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-ds-runtime-jvm-options-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dsr-jvm-options: "-Duser.timezone=Europe/Paris"
+---
+# Source: ibm-odm-prod/templates/ds-runtime-logging-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-ds-runtime-logging-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  dsr-logging: "<server>\n\t<logging traceFileName=\"stdout\" traceFormat=\"BASIC\" traceSpecification=\"*=audit:com.ibm.rules.*=info:ilog.rules.*=info\" consoleLogLevel=\"INFO\"/>\n</server>"
+---
+# Source: ibm-odm-prod/templates/ds-runtime-xu-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-ds-runtime-xu-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  xu-configuration.properties: |
+    # Add XU properties below
+---
+# Source: ibm-odm-prod/templates/tests/config-map-for-test.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  odm-prod-release-odm-test-configmap
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+data:
+  suite.sh: |-
+    #!/bin/bash
+    if [ $DECISION_RUNNER_ENABLED = "true" ]
+    then
+      sh /tests/wait-for-url.sh $DECISION_RUNNER_NAME
+    fi
+
+    if [ $DECISION_SERVER_RUNTIME_ENABLED = "true" ]
+    then
+      sh /tests/wait-for-url.sh $DECISION_SERVER_RUNTIME_NAME resExecutor resExecutor
+    fi
+
+    if [ $DECISION_CENTER_ENABLED = "true" ]
+    then
+      sh /tests/wait-for-url.sh $DECISION_CENTER_NAME/decisioncenter/t
+      sh /tests/wait-for-url.sh $DECISION_CENTER_NAME/teamserver
+      sh /tests/wait-for-url.sh $DECISION_CENTER_NAME/decisioncenter/assets/decision-center-client-api.zip
+    fi
+
+    if [ $DECISION_SERVER_CONSOLE_ENABLED = "true" ]
+    then
+      sh /tests/wait-for-url.sh $DECISION_SERVER_CONSOLE_NAME
+    fi
+
+  wait-for-url.sh: |-
+    #!/bin/bash
+    echo "Testing url $1 availabilty."
+
+    if [ $# -ge 3 ]
+    then
+      echo "authentication is enabled."
+      auth="-u $2:$3"
+    fi
+
+    i=0
+    until $(curl -k $auth --connect-timeout 180 --output /dev/null --silent --head --fail $1); do
+        printf '.'
+        i=$((i+1))
+        if [ $i -gt 10 ]
+        then
+            printf " $1 NOT available\n"
+            exit 1
+        fi
+        sleep 15
+    done
+
+    printf "OK\n"
+---
+# Source: ibm-odm-prod/templates/dbserver-pvclaim.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: odm-prod-release-odm-pvclaim
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  ## if present, use the storageClassName from the values.yaml, else use the
+  ## default storageClass setup by kube Administrator
+  ## setting storageClassName to nil means use the default storage class
+  storageClassName: "gp2"
+
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+# Source: ibm-odm-prod/templates/dbserver-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: odm-prod-release-dbserver
+  labels:
+    app: ibm-odm-prod
+    chart: ibm-odm-prod-20.2.0
+    release: odm-prod-release
+    heritage: Helm
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    run: odm-prod-release-dbserver
+    app: ibm-odm-prod
+    release: odm-prod-release
+  type: ClusterIP
+  ports:
+   - protocol: TCP
+     port: 5432
+---
+# Source: ibm-odm-prod/templates/dc-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: odm-prod-release-odm-decisioncenter
+  labels:
+    app: ibm-odm-prod
+    chart: ibm-odm-prod-20.2.0
+    release: odm-prod-release
+    heritage: Helm
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  sessionAffinity : ClientIP
+  selector:
+    run: odm-prod-release-odm-decisioncenter
+    app: ibm-odm-prod
+    release: odm-prod-release
+  type: NodePort
+  ports:
+   - protocol: TCP
+     port: 9453
+     name: decisioncenter-https
+     targetPort: 9453
+---
+# Source: ibm-odm-prod/templates/dr-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: odm-prod-release-odm-decisionrunner
+  labels:
+    app: ibm-odm-prod
+    chart: ibm-odm-prod-20.2.0
+    release: odm-prod-release
+    heritage: Helm
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    run: odm-prod-release-odm-decisionrunner
+    app: ibm-odm-prod
+    release: odm-prod-release
+  type: NodePort
+  ports:
+   - protocol: TCP
+     port: 9443
+     name: decisionrunner-https
+     targetPort: 9443
+---
+# Source: ibm-odm-prod/templates/ds-console-service-notif.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: odm-prod-release-odm-decisionserverconsole-notif
+  labels:
+    app: ibm-odm-prod
+    chart: ibm-odm-prod-20.2.0
+    release: odm-prod-release
+    heritage: Helm
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    run: odm-prod-release-odm-decisionserverconsole
+    app: ibm-odm-prod
+    release: odm-prod-release
+  type: ClusterIP
+  ports:
+   - name: notification
+     protocol: TCP
+     port: 1883
+---
+# Source: ibm-odm-prod/templates/ds-console-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: odm-prod-release-odm-decisionserverconsole
+  labels:
+    app: ibm-odm-prod
+    chart: ibm-odm-prod-20.2.0
+    release: odm-prod-release
+    heritage: Helm
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    run: odm-prod-release-odm-decisionserverconsole
+    app: ibm-odm-prod
+    release: odm-prod-release
+  type: NodePort
+  ports:
+   - protocol: TCP
+     port: 9443
+     name: decisionserverconsole-https
+     targetPort: 9443
+---
+# Source: ibm-odm-prod/templates/ds-runtime-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: odm-prod-release-odm-decisionserverruntime
+  labels:
+    app: ibm-odm-prod
+    chart: ibm-odm-prod-20.2.0
+    release: odm-prod-release
+    heritage: Helm
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    run: odm-prod-release-odm-decisionserverruntime
+    app: ibm-odm-prod
+    release: odm-prod-release
+  type: NodePort
+  ports:
+   - protocol: TCP
+     port: 9443
+     name: decisionserverruntime-https
+     targetPort: 9443
+---
+# Source: ibm-odm-prod/templates/dbserver-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odm-prod-release-dbserver
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    run: odm-prod-release-dbserver
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      release: odm-prod-release
+      run: odm-prod-release-dbserver
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        run: odm-prod-release-dbserver
+        app: ibm-odm-prod
+        chart: "ibm-odm-prod-20.2.0"
+        release: odm-prod-release
+        heritage: "Helm"
+        app.kubernetes.io/instance: odm-prod-release
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ibm-odm-prod
+        helm.sh/chart: ibm-odm-prod-20.2.0
+      annotations:
+        productName: "IBM Operational Decision Manager"
+        productID: b1a07d4dc0364452aa6206bb6584061d
+        productVersion: 8.10.4.0
+        productMetric: "PROCESSOR_VALUE_UNIT"
+        productChargedContainers: ""
+    spec:
+      serviceAccountName: default
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      securityContext:
+        runAsUser: 999
+        fsGroup: 999
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          #If you specify multiple nodeSelectorTerms associated with nodeAffinity types,
+          #then the pod can be scheduled onto a node if one of the nodeSelectorTerms is satisfied.
+          #
+          #If you specify multiple matchExpressions associated with nodeSelectorTerms,
+          #then the pod can be scheduled onto a node only if all matchExpressions can be satisfied.
+          #
+          #valid operators: In, NotIn, Exists, DoesNotExist, Gt, Lt
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+      volumes:
+      - name: odm-prod-release-ibm-odm-prod-volume
+        persistentVolumeClaim:
+          claimName: odm-prod-release-odm-pvclaim
+      initContainers:
+      - name: init-chmod-data
+        image: image-registry.openshift-image-registry.svc:5000/test/dbserver:8.10.4.0-amd64
+        imagePullPolicy: "IfNotPresent"
+        command:
+          - sh
+          - -c
+          - |
+            chown -R 999:999 /var/lib/postgresql/pgdata
+            if [ -d /var/lib/postgresql/pgdata ]; then
+              chmod  0777 /var/lib/postgresql/pgdata;
+            fi
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+        - name: odm-prod-release-ibm-odm-prod-volume
+          mountPath: /var/lib/postgresql/pgdata
+      containers:
+      - name: odm-prod-release-dbserver
+        image: image-registry.openshift-image-registry.svc:5000/test/dbserver:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 999
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: POSTGRES_DB
+          value: "odmdb"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-password
+        - name: PGDATA
+          value:  "/var/lib/postgresql/pgdata"
+        - name: "KubeVersion"
+          value: "v1.18.0"
+        - name: SAMPLE
+          value: "false"
+        ports:
+        - name: db-port
+          containerPort: 5432
+        readinessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 45
+        livenessProbe:
+          tcpSocket:
+            port: db-port
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          failureThreshold: 10
+        volumeMounts:
+          - name: odm-prod-release-ibm-odm-prod-volume
+            mountPath: /var/lib/postgresql/
+            subPath : pgdata
+        resources:
+          limits:
+            cpu: 2
+            memory: 4096Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+---
+# Source: ibm-odm-prod/templates/dc-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odm-prod-release-odm-decisioncenter
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    run: odm-prod-release-odm-decisioncenter
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    matchLabels:
+      release: "odm-prod-release"
+      run: odm-prod-release-odm-decisioncenter
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        run: odm-prod-release-odm-decisioncenter
+        app: ibm-odm-prod
+        chart: "ibm-odm-prod-20.2.0"
+        release: odm-prod-release
+        heritage: "Helm"
+        app.kubernetes.io/instance: odm-prod-release
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ibm-odm-prod
+        helm.sh/chart: ibm-odm-prod-20.2.0
+      annotations:
+        productName: "IBM Operational Decision Manager"
+        productID: b1a07d4dc0364452aa6206bb6584061d
+        productVersion: 8.10.4.0
+        productMetric: "PROCESSOR_VALUE_UNIT"
+        productChargedContainers: odm-prod-release-odm-decisioncenter
+    spec:
+      serviceAccountName: default
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          #If you specify multiple nodeSelectorTerms associated with nodeAffinity types,
+          #then the pod can be scheduled onto a node if one of the nodeSelectorTerms is satisfied.
+          #
+          #If you specify multiple matchExpressions associated with nodeSelectorTerms,
+          #then the pod can be scheduled onto a node only if all matchExpressions can be satisfied.
+          #
+          #valid operators: In, NotIn, Exists, DoesNotExist, Gt, Lt
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      
+      - name: odm-prod-release-odm-logging-volume
+        configMap:
+          name: odm-prod-release-odm-dc-logging-configmap
+          items:
+           - key: dc-logging
+             path: logging.xml
+      - name: odm-prod-release-odm-jvm-options-volume
+        configMap:
+          name: odm-prod-release-odm-dc-jvm-options-configmap
+          items:
+           - key: dc-jvm-options
+             path: jvm.options
+      - name: lib-workarea-volume
+        emptyDir: {}
+      initContainers:
+      - name: init-dc
+        image: image-registry.openshift-image-registry.svc:5000/test/dbserver:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        command: ['sh','-c', 'until [ $CHECK_DB_SERVER -eq 0 ]; do echo odm-prod-release-dbserver on port 5432 state $CHECK_DB_SERVER; CHECK_DB_SERVER=$(psql -q -h odm-prod-release-dbserver   -d $PGDATABASE  -c "select 1" -p 5432 >/dev/null;echo $?); echo "Check $CHECK_DB_SERVER"; sleep 2; done;']
+        env:
+        - name: PGDATABASE
+          value: "odmdb"
+        - name: PGCONNECT_TIMEOUT
+          value: "2"
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-user
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-password
+        resources:
+          limits:
+            cpu: 2
+            memory: 4096Mi
+          requests:
+            cpu: 500m
+            memory: 1500Mi
+      
+      containers:
+      - name: odm-prod-release-odm-decisioncenter
+        image: image-registry.openshift-image-registry.svc:5000/test/odm-decisioncenter:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        
+        - name: odm-prod-release-odm-logging-volume
+          mountPath: "/config/logging"
+        - name: odm-prod-release-odm-jvm-options-volume
+          mountPath: "/config/configDropins/overrides"
+        - name: lib-workarea-volume
+          mountPath: /opt/ibm/wlp/output/defaultServer/workarea
+        ports:
+        - name: dc-port
+          containerPort: 9453
+        
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            # decisioncenter-api start as last
+            path: /decisioncenter/healthCheck
+            port: dc-port
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 45
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            # decisioncenter is the most important to check
+            path: /decisioncenter/healthCheck
+            port: dc-port
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          failureThreshold: 10
+          timeoutSeconds: 5
+        env:
+          - name: DB_TYPE
+            value: "postgresql"
+          - name: "DB_SERVER_NAME"
+            value: odm-prod-release-dbserver
+          - name: DB_PORT_NUMBER
+            value: "5432"
+          - name: DB_NAME
+            value: "odmdb"
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-password
+          - name: "DECISIONSERVERCONSOLE_NAME"
+            value: odm-prod-release-odm-decisionserverconsole
+          - name: "DECISIONSERVERCONSOLE_PORT"
+            value: "9443"
+          - name: "DECISIONRUNNER_NAME"
+            value: odm-prod-release-odm-decisionrunner
+          - name: "DECISIONRUNNER_PORT"
+            value: "9443"
+          - name: "DC_PERSISTENCE_LOCALE"
+            value: "en_US"
+          - name: "ENABLE_TLS"
+            value: "true"
+          - name: "RELEASE_NAME"
+            value: odm-prod-release
+          
+          - name: "KubeVersion"
+            value: "ODM on K8s"
+          
+          
+          
+          - name: "DEPLOY_FOR_PRODUCTION"
+            value: "TRUE"
+        resources:
+          limits:
+            cpu: 2
+            memory: 4096Mi
+          requests:
+            cpu: 500m
+            memory: 1500Mi
+---
+# Source: ibm-odm-prod/templates/dr-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odm-prod-release-odm-decisionrunner
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    run: odm-prod-release-odm-decisionrunner
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    matchLabels:
+      release: "odm-prod-release"
+      run: odm-prod-release-odm-decisionrunner
+  replicas: 1
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        run: odm-prod-release-odm-decisionrunner
+        app: ibm-odm-prod
+        chart: "ibm-odm-prod-20.2.0"
+        release: odm-prod-release
+        heritage: "Helm"
+        app.kubernetes.io/instance: odm-prod-release
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ibm-odm-prod
+        helm.sh/chart: ibm-odm-prod-20.2.0
+      annotations:
+        productName: "IBM Operational Decision Manager"
+        productID: b1a07d4dc0364452aa6206bb6584061d
+        productVersion: 8.10.4.0
+        productMetric: "PROCESSOR_VALUE_UNIT"
+        productChargedContainers: odm-prod-release-odm-decisionrunner
+    spec:
+      serviceAccountName: default
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          #If you specify multiple nodeSelectorTerms associated with nodeAffinity types,
+          #then the pod can be scheduled onto a node if one of the nodeSelectorTerms is satisfied.
+          #
+          #If you specify multiple matchExpressions associated with nodeSelectorTerms,
+          #then the pod can be scheduled onto a node only if all matchExpressions can be satisfied.
+          #
+          #valid operators: In, NotIn, Exists, DoesNotExist, Gt, Lt
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      
+      - name: odm-prod-release-odm-logging-volume
+        configMap:
+          name: odm-prod-release-odm-dr-logging-configmap
+          items:
+           - key: dr-logging
+             path: logging.xml
+      - name: odm-prod-release-odm-jvm-options-volume
+        configMap:
+          name: odm-prod-release-odm-dr-jvm-options-configmap
+          items:
+           - key: dr-jvm-options
+             path: jvm.options
+      - name: lib-workarea-volume
+        emptyDir: {}
+      initContainers:
+      - name: init-decisionrunner
+        image: image-registry.openshift-image-registry.svc:5000/test/dbserver:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        command: ['sh','-c', 'until [ $CHECK_DB_SERVER -eq 0 ]; do echo odm-prod-release-dbserver on port 5432 state $CHECK_DB_SERVER; CHECK_DB_SERVER=$(psql -q -h odm-prod-release-dbserver   -d $PGDATABASE  -c "select 1" -p 5432 >/dev/null;echo $?); echo "Check $CHECK_DB_SERVER"; sleep 2; done;']
+        env:
+        - name: PGDATABASE
+          value: "odmdb"
+        - name: PGCONNECT_TIMEOUT
+          value: "2"
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-user
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-password
+        resources:
+          limits:
+            cpu: 2
+            memory: 4096Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      
+      containers:
+      - name: odm-prod-release-odm-decisionrunner
+        image: image-registry.openshift-image-registry.svc:5000/test/odm-decisionrunner:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        
+        - name: odm-prod-release-odm-logging-volume
+          mountPath: "/config/logging"
+        - name: odm-prod-release-odm-jvm-options-volume
+          mountPath: "/config/configDropins/overrides"
+        - name: lib-workarea-volume
+          mountPath: /opt/ibm/wlp/output/defaultServer/workarea
+        env:
+          - name: DB_TYPE
+            value: "postgresql"
+          - name: "DB_SERVER_NAME"
+            value: odm-prod-release-dbserver
+          - name: DB_PORT_NUMBER
+            value: "5432"
+          - name: DB_NAME
+            value: "odmdb"
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-password
+          - name: "DECISIONSERVERCONSOLE_NAME"
+            value: odm-prod-release-odm-decisionserverconsole
+          - name: "DECISIONSERVERCONSOLE_PORT"
+            value: "9443"
+          - name: "ENABLE_TLS"
+            value: "true"
+          - name: "RELEASE_NAME"
+            value: odm-prod-release
+          
+          - name: "KubeVersion"
+            value: "ODM on K8s"
+          
+          
+          
+          - name: "DEPLOY_FOR_PRODUCTION"
+            value: "TRUE"
+        ports:
+        - name: dr-port
+          containerPort: 9443
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /DecisionRunner
+            port: dr-port
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 45
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /DecisionRunner
+            port: dr-port
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          failureThreshold: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 2
+            memory: 4096Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+---
+# Source: ibm-odm-prod/templates/ds-console-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odm-prod-release-odm-decisionserverconsole
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    run: odm-prod-release-odm-decisionserverconsole
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    matchLabels:
+      release: "odm-prod-release"
+      run: odm-prod-release-odm-decisionserverconsole
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        run: odm-prod-release-odm-decisionserverconsole
+        app: ibm-odm-prod
+        chart: "ibm-odm-prod-20.2.0"
+        release: odm-prod-release
+        heritage: "Helm"
+        app.kubernetes.io/instance: odm-prod-release
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ibm-odm-prod
+        helm.sh/chart: ibm-odm-prod-20.2.0
+      annotations:
+        productName: "IBM Operational Decision Manager"
+        productID: b1a07d4dc0364452aa6206bb6584061d
+        productVersion: 8.10.4.0
+        productMetric: "PROCESSOR_VALUE_UNIT"
+        productChargedContainers: ""
+    spec:
+      serviceAccountName: default
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          #If you specify multiple nodeSelectorTerms associated with nodeAffinity types,
+          #then the pod can be scheduled onto a node if one of the nodeSelectorTerms is satisfied.
+          #
+          #If you specify multiple matchExpressions associated with nodeSelectorTerms,
+          #then the pod can be scheduled onto a node only if all matchExpressions can be satisfied.
+          #
+          #valid operators: In, NotIn, Exists, DoesNotExist, Gt, Lt
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+      volumes:
+      
+      - name: odm-prod-release-odm-logging-volume
+        configMap:
+          name: odm-prod-release-odm-ds-console-logging-configmap
+          items:
+           - key: dsc-logging
+             path: logging.xml
+      - name: odm-prod-release-odm-jvm-options-volume
+        configMap:
+          name: odm-prod-release-odm-ds-console-jvm-options-configmap
+          items:
+           - key: dsc-jvm-options
+             path: jvm.options
+      - name: lib-workarea-volume
+        emptyDir: {}
+      initContainers:
+      - name: init-decisionserverconsole
+        image: image-registry.openshift-image-registry.svc:5000/test/dbserver:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        command: ['sh','-c', 'until [ $CHECK_DB_SERVER -eq 0 ]; do echo odm-prod-release-dbserver on port 5432 state $CHECK_DB_SERVER; CHECK_DB_SERVER=$(psql -q -h odm-prod-release-dbserver   -d $PGDATABASE  -c "select 1" -p 5432 >/dev/null;echo $?); echo "Check $CHECK_DB_SERVER"; sleep 2; done;']
+        env:
+        - name: PGDATABASE
+          value: "odmdb"
+        - name: PGCONNECT_TIMEOUT
+          value: "2"
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-user
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-password
+        resources:
+          limits:
+            cpu: 2
+            memory: 1024Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      
+      containers:
+      - name: odm-prod-release-odm-decisionserverconsole
+        image: image-registry.openshift-image-registry.svc:5000/test/odm-decisionserverconsole:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        
+        - name: odm-prod-release-odm-logging-volume
+          mountPath: "/config/logging"
+        - name: odm-prod-release-odm-jvm-options-volume
+          mountPath: "/config/configDropins/overrides"
+        - name: lib-workarea-volume
+          mountPath: /opt/ibm/wlp/output/defaultServer/workarea
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: DB_TYPE
+            value: "postgresql"
+          - name: "DB_SERVER_NAME"
+            value: odm-prod-release-dbserver
+          - name: DB_PORT_NUMBER
+            value: "5432"
+          - name: DB_NAME
+            value: "odmdb"
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-password
+          - name: "RELEASE_NAME"
+            value: odm-prod-release
+          
+          - name: "KubeVersion"
+            value: "ODM on K8s"
+          
+          
+          
+          - name: "DEPLOY_FOR_PRODUCTION"
+            value: "TRUE"
+        ports:
+        - name: dsc-port
+          containerPort: 9443
+        - containerPort: 1883
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /res
+            port: dsc-port
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 45
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /res
+            port: dsc-port
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          failureThreshold: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 2
+            memory: 1024Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+---
+# Source: ibm-odm-prod/templates/ds-runtime-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odm-prod-release-odm-decisionserverruntime
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    run: odm-prod-release-odm-decisionserverruntime
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+spec:
+  selector:
+    matchLabels:
+      release: "odm-prod-release"
+      run: odm-prod-release-odm-decisionserverruntime
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        run: odm-prod-release-odm-decisionserverruntime
+        app: ibm-odm-prod
+        chart: "ibm-odm-prod-20.2.0"
+        release: odm-prod-release
+        heritage: "Helm"
+        app.kubernetes.io/instance: odm-prod-release
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: ibm-odm-prod
+        helm.sh/chart: ibm-odm-prod-20.2.0
+      annotations:
+        productName: "IBM Operational Decision Manager"
+        productID: b1a07d4dc0364452aa6206bb6584061d
+        productVersion: 8.10.4.0
+        productMetric: "PROCESSOR_VALUE_UNIT"
+        productChargedContainers: odm-prod-release-odm-decisionserverruntime
+    spec:
+      serviceAccountName: default
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          #If you specify multiple nodeSelectorTerms associated with nodeAffinity types,
+          #then the pod can be scheduled onto a node if one of the nodeSelectorTerms is satisfied.
+          #
+          #If you specify multiple matchExpressions associated with nodeSelectorTerms,
+          #then the pod can be scheduled onto a node only if all matchExpressions can be satisfied.
+          #
+          #valid operators: In, NotIn, Exists, DoesNotExist, Gt, Lt
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+      volumes:
+      
+      - name: odm-prod-release-odm-logging-volume
+        configMap:
+          name: odm-prod-release-odm-ds-runtime-logging-configmap
+          items:
+           - key: dsr-logging
+             path: logging.xml
+      - name: odm-prod-release-odm-jvm-options-volume
+        configMap:
+          name: odm-prod-release-odm-ds-runtime-jvm-options-configmap
+          items:
+           - key: dsr-jvm-options
+             path: jvm.options
+      - name: lib-workarea-volume
+        emptyDir: {}
+      - name: odm-prod-release-odm-ds-runtime-xuconfigref-volume
+        configMap:
+          name: odm-prod-release-odm-ds-runtime-xu-configmap
+      initContainers:
+      - name: init-decisionserverruntime
+        image: image-registry.openshift-image-registry.svc:5000/test/dbserver:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        command: ['sh','-c', 'until [ $CHECK_DB_SERVER -eq 0 ]; do echo odm-prod-release-dbserver on port 5432 state $CHECK_DB_SERVER; CHECK_DB_SERVER=$(psql -q -h odm-prod-release-dbserver   -d $PGDATABASE  -c "select 1" -p 5432 >/dev/null;echo $?); echo "Check $CHECK_DB_SERVER"; sleep 2; done;']
+        env:
+        - name: PGDATABASE
+          value: "odmdb"
+        - name: PGCONNECT_TIMEOUT
+          value: "2"
+        - name: PGUSER
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-user
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: odm-db-secret
+              key: db-password
+        resources:
+          limits:
+            cpu: 2
+            memory: 4096Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+      
+      containers:
+      - name: odm-prod-release-odm-decisionserverruntime
+        image: image-registry.openshift-image-registry.svc:5000/test/odm-decisionserverruntime:8.10.4.0-amd64
+        securityContext:
+          runAsUser: 1001
+          runAsNonRoot: true
+          privileged: false
+          readOnlyRootFilesystem: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        
+        - name: odm-prod-release-odm-logging-volume
+          mountPath: "/config/logging"
+        - name: odm-prod-release-odm-jvm-options-volume
+          mountPath: "/config/configDropins/overrides"
+        - name: lib-workarea-volume
+          mountPath: /opt/ibm/wlp/output/defaultServer/workarea
+        - name: odm-prod-release-odm-ds-runtime-xuconfigref-volume
+          readOnly: true
+          mountPath: /config/xu-configuration.properties
+          subPath: xu-configuration.properties
+        env:
+          - name: DB_TYPE
+            value: "postgresql"
+          - name: "DB_SERVER_NAME"
+            value: odm-prod-release-dbserver
+          - name: DB_PORT_NUMBER
+            value: "5432"
+          - name: DB_NAME
+            value: "odmdb"
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: odm-db-secret
+                key: db-password
+          - name: "DECISIONSERVERCONSOLE_NAME"
+            value: odm-prod-release-odm-decisionserverconsole-notif
+          - name: "RELEASE_NAME"
+            value: odm-prod-release
+          
+          - name: "KubeVersion"
+            value: "ODM on K8s"
+          
+          
+          
+          - name: "DEPLOY_FOR_PRODUCTION"
+            value: "TRUE"
+        ports:
+        - name: dsr-port
+          containerPort: 9443
+        readinessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /DecisionService
+            port: dsr-port
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 45
+          timeoutSeconds: 5
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /DecisionService
+            port: dsr-port
+          initialDelaySeconds: 300
+          periodSeconds: 10
+          failureThreshold: 10
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 2
+            memory: 4096Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+---
+# Source: ibm-odm-prod/templates/tests/test-pattern.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name:  odm-prod-release-odm-test
+  labels:
+    app: odm-prod-release-ibm-odm-prod
+    chart: "ibm-odm-prod-20.2.0"
+    release: "odm-prod-release"
+    heritage: "Helm"
+    app.kubernetes.io/instance: odm-prod-release
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: ibm-odm-prod
+    helm.sh/chart: ibm-odm-prod-20.2.0
+  annotations:
+    helm.sh/hook: test-success
+spec:
+  serviceAccountName: default
+  hostNetwork: false
+  hostPID: false
+  hostIPC: false
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 10000
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: beta.kubernetes.io/arch
+            operator: In
+            values:
+            - amd64
+  containers:
+  - name: odm-prod-release-odm-test
+    image: image-registry.openshift-image-registry.svc:5000/test/odm-decisionserverruntime:8.10.4.0-amd64
+    imagePullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 2
+        memory: 4096Mi
+    securityContext:
+      runAsUser: 1000
+      runAsNonRoot: true
+      privileged: false
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+    env:
+      - name: DBSERVER
+        value: odm-prod-release-dbserver
+      - name: DECISION_SERVER_CONSOLE_NAME
+        value: "https://odm-prod-release-odm-decisionserverconsole:9443/res"
+      - name: DECISION_SERVER_CONSOLE_ENABLED
+        value: "true"
+      - name: DECISION_SERVER_RUNTIME_NAME
+        value: "https://odm-prod-release-odm-decisionserverruntime:9443/DecisionService"
+      - name: DECISION_SERVER_RUNTIME_ENABLED
+        value: "true"
+      - name: DECISION_CENTER_NAME
+        value: "https://odm-prod-release-odm-decisioncenter:9453"
+      - name: DECISION_CENTER_ENABLED
+        value: "true"
+      - name: DECISION_RUNNER_NAME
+        value: "https://odm-prod-release-odm-decisionrunner:9443/DecisionRunner"
+      - name: DECISION_RUNNER_ENABLED
+        value: "true"
+      - name: PERSISTENCECLAIM
+        value: odm-prod-release-odm-pvclaim
+      - name: HTTPPROTOCOL
+        value: "https"
+    command: ["/bin/bash", "-c", "/tests/suite.sh"]
+    volumeMounts:
+      - name: tests
+        mountPath: /tests
+  volumes:
+    - name: tests
+      configMap:
+        defaultMode: 0755
+        name: odm-prod-release-odm-test-configmap
+  restartPolicy: Never
