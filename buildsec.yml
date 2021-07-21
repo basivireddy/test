@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo "Installing components..."
+      - yarn install
+  build:
+    commands:
+      - eval $GIT_CHECKOUT_COMMAND
+      - echo "Building JS & CSS..."
+      - echo "Environment $ENV"
+      - yarn run ng build --configuration=$ENV
+
+artifacts:
+  name: code_files
+  base-directory: dist/awconnect
+  files:
+    - "**/*"
