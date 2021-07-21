@@ -9,6 +9,7 @@ phases:
       - yarn install
   build:
     commands:
+      - echo "$GIT_CHECKOUT_COMMAND"
       - eval $GIT_CHECKOUT_COMMAND
       - echo "Building JS & CSS..."
       - echo "Environment $ENV"
