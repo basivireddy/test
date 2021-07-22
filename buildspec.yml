@@ -11,6 +11,8 @@ phases:
     commands:
       - echo "$GIT_CHECKOUT_COMMAND"
       - git status
+      - c="pwd"
+      - eval $c
       - eval $GIT_CHECKOUT_COMMAND
       - echo "Building JS & CSS..."
       - echo "Environment $ENV"
