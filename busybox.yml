@@ -1,0 +1,35 @@
+  apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: busybox
+    name: busybox-volume
+  spec:
+    replicas: 3
+    selector:
+      app: busybox
+    strategy:
+        recreateParams:
+            timeoutSeconds: 600
+        type: Recreate
+    template:
+      metadata:
+        labels:
+          app: busybox
+      spec:
+#        nodeName: node
+        containers:
+        - image: busybox
+          imagePullPolicy: Always
+          command:
+          - sleep
+          args:
+          - "3600"
+          name: busybox
+          volumeMounts:
+          - mountPath: test
+            name: test
+        volumes:
+            - name: test
+              persistentVolumeClaim:
+                claimName: test
