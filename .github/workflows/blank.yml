@@ -39,5 +39,6 @@ jobs:
         uses: laputansoft/github-tag-action@v4.6
         with:
       #    github_token: ${{ env.github-token }}
-          tag: ${{ steps.package-version.outputs.version }}
+      #    tag: ${{ steps.package-version.outputs.version }}
+           tag: "0.0.36"
           
