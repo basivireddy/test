@@ -34,3 +34,10 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      - name: Bump version and push tag
+        uses: laputansoft/github-tag-action@v4.6
+        with:
+      #    github_token: ${{ env.github-token }}
+          tag: ${{ steps.package-version.outputs.version }}
+          
