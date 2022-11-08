@@ -47,7 +47,7 @@ jobs:
           echo "hi"
           
 
-  
+      - uses: actions/checkout@main
       - name: Bump version and push tag
         uses: laputansoft/github-tag-action@v4.6
         with:
