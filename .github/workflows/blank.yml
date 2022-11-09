@@ -45,7 +45,7 @@ jobs:
           echo "${{ steps.package-version.outputs.version }}",
           echo "${{ steps.package-version.version }}",
           echo "hi",
-          echo "PACKAGE_VERSION=v12.2.3" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=v12.2.8989" >> $GITHUB_ENV
           
 
       - uses: actions/checkout@main
