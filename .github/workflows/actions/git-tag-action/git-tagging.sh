@@ -1,3 +1,4 @@
+#!/bin/bash
 
 # input validation
 if [[ -z "${TAG}" ]]; then
@@ -24,7 +25,7 @@ echo "**pushing tag $tag to repo $GITHUB_REPOSITORY"
 if $tag_exists
 then
   # update tag
-  curl -s -X PATCH "$git_refs_url/tags/$TAG" \
+  curl -s -k -X PATCH "$git_refs_url/tags/$TAG" \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
@@ -35,7 +36,7 @@ then
 EOF
 else
   # create new tag
-  curl -s -X POST $git_refs_url \
+  curl -s -k -X POST $git_refs_url \
   -H "Authorization: token $GITHUB_TOKEN" \
   -d @- << EOF
 
