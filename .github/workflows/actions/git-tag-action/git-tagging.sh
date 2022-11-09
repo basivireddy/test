@@ -20,7 +20,7 @@ fi
 # push the tag to github
 git_refs_url=$(jq .repository.git_refs_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
 
-echo "**pushing tag $tag to repo $GITHUB_REPOSITORY"
+echo "**pushing tag $TAG to repo $GITHUB_REPOSITORY"
 
 if $tag_exists
 then
