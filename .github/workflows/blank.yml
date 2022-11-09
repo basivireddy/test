@@ -63,7 +63,7 @@ jobs:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: git tagging
-        uses: ./.github/actions/git-tag-action
+        uses: ./.github/workflows/actions/git-tag-action
         env:
           TAG: ${{ env.PACKAGE_VERSION }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
