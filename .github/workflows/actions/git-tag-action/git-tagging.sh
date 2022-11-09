@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # input validation
 if [[ -z "${TAG}" ]]; then
