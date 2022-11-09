@@ -6,6 +6,7 @@ runs:
   steps:
     - name: Run a one-line script
       run: echo Hello, world!
+      shell: bash
       
     - run: git-tagging.sh
       shell: bash
