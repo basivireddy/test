@@ -7,7 +7,7 @@ runs:
     - name: Run a one-line script
       run: echo Hello, world!
       
-    - run: goodbye.sh
+    - run: git-tagging.sh
       shell: bash
       
       
