@@ -1,0 +1,13 @@
+name: 'Git Tag Action'
+description: 'Add a git tag to the current workflow commit'
+author: 'basivireddy'
+runs:
+  using: "composite"
+  steps:
+    - name: Run a one-line script
+      run: echo Hello, world!
+      
+    - run: goodbye.sh
+      shell: bash
+      
+      
