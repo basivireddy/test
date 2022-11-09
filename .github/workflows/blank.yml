@@ -49,6 +49,7 @@ jobs:
           
 
       - uses: actions/checkout@main
+      
       - name: Bump version and push tag
         uses: laputansoft/github-tag-action@v4.6
         with:
@@ -56,7 +57,13 @@ jobs:
       #    tag: ${{ steps.package-version.outputs.version }}
           tag: "0.0.36"
           
-      - uses: hole19/git-tag-action@master
+#      - uses: hole19/git-tag-action@master
+#        env:
+#          TAG: ${{ env.PACKAGE_VERSION }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: git tagging
+        uses: ./.github/actions/git-tag-action
         env:
           TAG: ${{ env.PACKAGE_VERSION }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
