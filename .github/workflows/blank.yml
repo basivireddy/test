@@ -67,7 +67,7 @@ jobs:
         run: |
            tag=$(git describe --tags --abbrev=0 HEAD")
            echo "$tag"
-           cf=$(git diff --quiet HEAD ${tag} -- helm/hello-world)
+           cf=$(git diff --quiet HEAD $tag -- argocd)
            echo "$cf"
            
            
