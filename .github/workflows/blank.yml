@@ -57,13 +57,20 @@ jobs:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-      - name: Auto Increment
-        run: |
-           tag=$(git describe --tags --abbrev=0 HEAD --always)
-           echo "tag : $tag"
-           cf=$(git diff --quiet HEAD $tag -- argocd)
-           echo "cf : $cf"
-           
+#      - name: Auto Increment
+#        run: |
+#           tag=$(git describe --tags --abbrev=0 HEAD --always)
+#           echo "tag : $tag"
+#           cf=$(git diff --quiet HEAD $tag -- argocd)
+#           echo "cf : $cf"
+ 
+      - name:  Helm Version Auto Increment
+        uses: ./.github/workflows/actions/helm-version-auto-increment
+        env:
+          HELM_VERSION: 1.0.1
+          CHART_PATH: "charts/hello-world"
+
+
            
 #      - name: git tagging
 #        uses: ./.github/workflows/actions/git-tag-action
