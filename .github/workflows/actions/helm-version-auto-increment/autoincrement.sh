@@ -17,8 +17,8 @@ tag=$(git describe --tags --abbrev=0 HEAD --always)
 echo "tag : $tag"
 
 
-cf=$(git diff --quiet HEAD ${tag} -- ${CHART_PATH})
-
+git diff --quiet HEAD ${tag} -- ${CHART_PATH}
+cf=$?
 echo "cf: $cf"
 
 if [[ $cf != 0 ]]; then
