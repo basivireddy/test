@@ -62,6 +62,15 @@ jobs:
 #          TAG: ${{ env.PACKAGE_VERSION }}
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
+      - name: Auto Increment
+        run: |
+           tag=$(git describe --tags --abbrev=0 HEAD")
+           echo "$tag"
+           cf=$(git diff --quiet HEAD ${tag} -- helm/hello-world)
+           echo "$cf"
+           
+           
       - name: git tagging
         uses: ./.github/workflows/actions/git-tag-action
         env:
