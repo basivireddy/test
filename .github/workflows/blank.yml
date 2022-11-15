@@ -65,14 +65,15 @@ jobs:
 
       - name: Auto Increment
         run: |
+           git describe --tags --abbrev=0 HEAD
            tag=$(git describe --tags --abbrev=0 HEAD)
-           echo "$tag"
+           echo $tag
            cf=$(git diff --quiet HEAD $tag -- argocd)
-           echo "$cf"
+           echo $cf
            
            
-      - name: git tagging
-        uses: ./.github/workflows/actions/git-tag-action
-        env:
-          TAG: ${{ env.PACKAGE_VERSION }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: git tagging
+#        uses: ./.github/workflows/actions/git-tag-action
+#        env:
+#          TAG: ${{ env.PACKAGE_VERSION }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
