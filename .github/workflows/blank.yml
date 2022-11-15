@@ -67,7 +67,7 @@ jobs:
       - name:  Helm Version Auto Increment
         uses: ./.github/workflows/actions/helm-version-auto-increment
         env:
-          HELM_VERSION: 1.0.1
+          HELM_VERSION: "1.0.1"
           CHART_PATH: "charts/hello-world"
 
 
