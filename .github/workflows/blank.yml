@@ -48,14 +48,8 @@ jobs:
           echo "PACKAGE_VERSION=v12.2.100" >> $GITHUB_ENV
           
 
-      - uses: actions/checkout@main
-      
-      - name: Bump version and push tag
-        uses: laputansoft/github-tag-action@v4.6
-        with:
-      #    github_token: ${{ env.github-token }}
-      #    tag: ${{ steps.package-version.outputs.version }}
-          tag: "0.0.36"
+#      - uses: actions/checkout@main
+
           
 #      - uses: hole19/git-tag-action@master
 #        env:
