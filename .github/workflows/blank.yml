@@ -65,7 +65,7 @@ jobs:
 
       - name: Auto Increment
         run: |
-           tag=$(git describe --tags --abbrev=0 HEAD")
+           tag=$(git describe --tags --abbrev=0 HEAD)
            echo "$tag"
            cf=$(git diff --quiet HEAD $tag -- argocd)
            echo "$cf"
