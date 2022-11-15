@@ -13,7 +13,7 @@ fi
 
 echo "inputs: helm version: ${HELM_VERSION}, chart_path:  ${CHART_PATH}"
 
-tag=$(git describe --tags --abbrev=0 HEAD --always)
+tag=$(git describe --tags --abbrev=0 HEAD)
 echo "tag : $tag"
 
 
