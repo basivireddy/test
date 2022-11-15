@@ -11,6 +11,7 @@ if [[ -z "${CHART_PATH}" ]]; then
    exit 1
 fi
 
+echo "inputs: helm version: ${HELM_VERSION}, chart_path:  ${CHART_PATH}"
 
 tag=$(git describe --tags --abbrev=0 HEAD --always)
 echo "tag : $tag"
@@ -18,14 +19,13 @@ echo "tag : $tag"
 
 cf=$(git diff --quiet HEAD ${tag} -- ${CHART_PATH})
 
-echo "${cf}"
+echo "cf: $cf"
 
-if ( cf != 0 ) {
+if [[ $cf != 0 ]]; then
    echo "There is a change in helm chart"
-}
-else {
+else 
   echo "There is no change in helm chart"
-}
+fi
 
                   
                   
