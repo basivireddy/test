@@ -1,3 +1,24 @@
 https://stackoverflow.com/questions/71348621/docker-re-use-container-image-by-caching
 https://github.com/docker/build-push-action/issues/286
 https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-layer-caching
+
+
+
+      - name: Build base image
+        id: docker_build_base
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Containerfile
+          push: false
+          load: false
+          tags: -t
+          build-args: 
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache
+          target: base
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.MYTOKEN }}
+          
+          
+          
