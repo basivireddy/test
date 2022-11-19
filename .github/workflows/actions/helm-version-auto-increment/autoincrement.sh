@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# input validation
-if [[ -z "${HELM_VERSION}" ]]; then
-   echo "No tag name supplied"
-   exit 1
-fi
-
+# Input Validation
 if [[ -z "${CHART_PATH}" ]]; then
    echo "No tag name supplied"
    exit 1
 fi
+
+# Helm Version
+grep "version:" ./$CHART_PATH/Chart.yaml
+HELM_version=$(grep "version:" ./$CHART_PATH/Chart.yaml | awk '{print $2}')
+echo "HELM_version : $HELM_version"
+
 
 echo "inputs: helm version: ${HELM_VERSION}, chart_path:  ${CHART_PATH}"
 
