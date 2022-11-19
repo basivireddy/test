@@ -8,8 +8,8 @@ fi
 
 # Helm Version
 grep "version:" ./$CHART_PATH/Chart.yaml
-HELM_version=$(grep "version:" ./$CHART_PATH/Chart.yaml | awk '{print $2}')
-echo "HELM_version : $HELM_version"
+HELM_VERSION=$(grep "version:" ./$CHART_PATH/Chart.yaml | awk '{print $2}')
+echo "HELM_VERSION : $HELM_VERSION"
 
 
 echo "inputs: helm version: ${HELM_VERSION}, chart_path:  ${CHART_PATH}"
