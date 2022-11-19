@@ -10,7 +10,7 @@ fi
 grep "version:" ./$CHART_PATH/Chart.yaml
 HELM_VERSION=$(grep "version:" ./$CHART_PATH/Chart.yaml | awk '{print $2}')
 echo "HELM_VERSION : $HELM_VERSION"
-Updated_HELM_VERSION =$(echo "${HELM_VERSION}" | awk -F. '{ $NF = $NF + 1;} 1' | sed 's/ /./g')
+Updated_HELM_VERSION=$(echo "${HELM_VERSION}" | awk -F. '{ $NF = $NF + 1;} 1' | sed 's/ /./g')
 echo "${Updated_HELM_VERSION}"
 
 echo "inputs: helm version: ${HELM_VERSION}, chart_path:  ${CHART_PATH}"
