@@ -1,5 +1,5 @@
 #!/bin/bash
-jsonString='{"results":[{ "uri": "test"} ]}'
+jsonString='{"results":[{ "uri": "test"}, { "uri": "test"} ]}'
 #jsonString='{"results":[ ]}'
 echo $jsonString
 
@@ -10,8 +10,8 @@ echo $jsonString | jq '.results[0].uri'
 count=$(echo $jsonString | jq '.results[] | length')
 echo "count $count"
 
-if [[ $count == 1 ]]; then
-   echo "objects there"
+if [[ $count == 0 ]]; then
+   echo "objects not there"
 else
-   echo "object not there"   
+   echo "object  there"   
 fi
