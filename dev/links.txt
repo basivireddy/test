@@ -1,5 +1,9 @@
 bigquery https://partner.cloudskillsboost.google/focuses/12043?parent=catalog
+---------------------
+permissions:
+https://cloud.google.com/bigquery/docs/access-control#permissions_and_predefined_roles
 
+--------------------
 
 bq query --use_legacy_sql=false 'SELECT   word,   SUM(word_count) AS count FROM `bigquery-public-data`.samples.shakespeare  WHERE   word LIKE "%raisin%"'
 
