@@ -1,0 +1,1 @@
+bigquery https://partner.cloudskillsboost.google/focuses/12043?parent=catalog
