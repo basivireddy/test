@@ -1,5 +1,5 @@
 bigquery https://partner.cloudskillsboost.google/focuses/12043?parent=catalog
 
 
-bq query --use_legacy_sql=false 'SELECT   word,   SUM(word_count) AS count FROM `bigquery-public-data`.samples.shakespeare  WHERE   word LIKE "%raisin%"
+bq query --use_legacy_sql=false 'SELECT   word,   SUM(word_count) AS count FROM `bigquery-public-data`.samples.shakespeare  WHERE   word LIKE "%raisin%"'
 
