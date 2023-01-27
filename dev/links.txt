@@ -12,3 +12,24 @@ bq ls bigquery-public-data:
 # create dataset
 bq mk babynames   
 
+
+curl -LO http://www.ssa.gov/OACT/babynames/names.zip
+
+unzip names.zip
+
+bq load babynames.names2010 yob2010.txt
+
+
+bq ls babynames
+bq show babynames.names2010
+
+bq query "SELECT name,count FROM babynames.names2010 WHERE gender = 'F' ORDER BY count DESC LIMIT 5"
+
+bq query "SELECT name,count FROM babynames.names2010 WHERE gender = 'M' ORDER BY count ASC LIMIT 5"
+
+bq rm -r babynames
+
+
+ 
+
+
