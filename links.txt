@@ -23,3 +23,7 @@ https://evilmartians.com/chronicles/build-images-on-github-actions-with-docker-l
           
           
 https://testdriven.io/blog/faster-ci-builds-with-docker-cache/
+
+
+
+https://github.com/basivireddy/bulk-find-and-replace-in-git-repositories/blob/master/findandreplace.py#L4
