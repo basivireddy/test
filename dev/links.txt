@@ -35,6 +35,8 @@ bq query "SELECT name,count FROM babynames.names2010 WHERE gender = 'M' ORDER BY
 bq rm -r babynames
 
 
+
+
 https://stackoverflow.com/questions/44377238/use-ssh-credentials-in-jenkins-pipeline-with-ssh-scp-or-sftp
 
 
@@ -42,3 +44,7 @@ https://stackoverflow.com/questions/44377238/use-ssh-credentials-in-jenkins-pipe
 
 
 https://stackoverflow.com/questions/44377238/use-ssh-credentials-in-jenkins-pipeline-with-ssh-scp-or-sftp
+
+
+sh "echo ${keyfile} > ssh_id_rsa"
+sh "ls -la"
