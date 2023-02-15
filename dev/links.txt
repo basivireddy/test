@@ -48,3 +48,6 @@ https://stackoverflow.com/questions/44377238/use-ssh-credentials-in-jenkins-pipe
 
 sh "echo ${keyfile} > ssh_id_rsa"
 sh "ls -la"
+
+
+https://pip.pypa.io/en/stable/installation/
