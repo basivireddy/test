@@ -51,3 +51,8 @@ sh "ls -la"
 
 
 https://pip.pypa.io/en/stable/installation/
+
+
+
+terraform
+https://github.com/basivireddy/terransible/blob/master/course_scripts/main.tf
