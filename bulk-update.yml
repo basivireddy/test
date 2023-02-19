@@ -1,6 +1,6 @@
 cron(0 0 5 1/1 * ? *)
-hi
+cron(0 0 5 ? * MON,TUE,WED,THU,FRI *)
 cron(0 0 5 1/1 * ? *)
-hi
+cron(0 0 5 ? * MON,TUE,WED,THU,FRI *)
 test
 cron(0 0 5 1/1 * ? *)
