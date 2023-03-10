@@ -56,3 +56,6 @@ https://pip.pypa.io/en/stable/installation/
 
 terraform
 https://github.com/basivireddy/terransible/blob/master/course_scripts/main.tf
+
+
+https://newcontext-oss.github.io/kitchen-terraform/getting_started.html
