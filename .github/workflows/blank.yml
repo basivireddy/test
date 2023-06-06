@@ -72,8 +72,8 @@ jobs:
           CHART_PATH: "charts/hello-world"          
 
            
-#      - name: git tagging
-#        uses: ./.github/workflows/actions/git-tag-action
-#        env:
-#          TAG: ${{ env.PACKAGE_VERSION }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: git tagging
+        uses: ./.github/workflows/actions/git-tag-action
+        env:
+          TAG: ${{ env.PACKAGE_VERSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
