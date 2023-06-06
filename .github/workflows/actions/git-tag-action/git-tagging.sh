@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # input validation
 if [[ -z "${TAG}" ]]; then
