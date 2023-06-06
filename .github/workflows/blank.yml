@@ -75,5 +75,5 @@ jobs:
       - name: git tagging
         uses: ./.github/workflows/actions/git-tag-action
         env:
-          TAG: ${{ env.PACKAGE_VERSION }}
+          TAG: "1.0.1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
