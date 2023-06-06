@@ -18,7 +18,8 @@ if [ $(git tag -l "$TAG") ]; then
     tag_exists="true"
 fi
 
-echo $$GITHUB_EVENT_PATH
+echo "$GITHUB_EVENT_PATH"
+cat "$GITHUB_EVENT_PATH"
 
 # push the tag to github
 git_refs_url=$(jq .repository.git_refs_url $GITHUB_EVENT_PATH | tr -d '"' | sed 's/{\/sha}//g')
