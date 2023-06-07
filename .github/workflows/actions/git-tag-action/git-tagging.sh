@@ -17,6 +17,8 @@ tag_exists="false"
 if [ $(git tag -l "$TAG") ]; then
     tag_exists="true"
 fi
+jq -V
+echo "jq version"
 
 echo "$GITHUB_EVENT_PATH"
 cat "$GITHUB_EVENT_PATH"
