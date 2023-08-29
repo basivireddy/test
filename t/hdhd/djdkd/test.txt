@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                //sh 'mkdir report'
+                sh 'echo hi > report/hi.txt'
+                echo 'Hello World' 
+                // Archive the built artifacts
+              archive (includes: 'report/*')
+              zip zipFile: 'test.zip', archive: false, dir: 'report'
+              archiveArtifacts artifacts: 'test.zip', fingerprint: true
+
+                }
+        }
+    }
+    post { 
+        always {
+            
+            
+            echo 'I will always say Hello again!'
+        }
+    }
+}
