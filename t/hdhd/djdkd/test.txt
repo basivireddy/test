@@ -19,6 +19,8 @@ pipeline {
             archive (includes: 'report/*')
             zip zipFile: 'test.zip', archive: false, dir: 'report'
             archiveArtifacts artifacts: 'test.zip', fingerprint: true
+
+// emailext attachLog: true, attachmentsPattern: 'generatedFile.txt'
         }
     }
 }
