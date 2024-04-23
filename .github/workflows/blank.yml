@@ -66,10 +66,10 @@ jobs:
 #           cf=$(git diff --quiet HEAD $tag -- argocd)
 #           echo "cf : $cf"
  
-      - name:  Helm Version Auto Increment
-        uses: ./.github/workflows/actions/helm-version-auto-increment
-        env:
-          CHART_PATH: "charts/hello-world"          
+#      - name:  Helm Version Auto Increment
+#        uses: ./.github/workflows/actions/helm-version-auto-increment
+#        env:
+#          CHART_PATH: "charts/hello-world"          
 
            
       - name: git tagging
