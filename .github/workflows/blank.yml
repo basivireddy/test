@@ -78,4 +78,5 @@ jobs:
         env:
           TAG: "1.0.1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
           build_tag: "test_tag"
