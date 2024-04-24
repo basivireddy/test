@@ -71,7 +71,7 @@ jobs:
 #        env:
 #          CHART_PATH: "charts/hello-world"          
 
-           
+# multi line is not working to send as input           
       - name: git tagging
         #uses: ./.github/workflows/actions/git-tag-action
         uses: basivireddy/github-actions-common/git-tag-action@main
@@ -79,6 +79,6 @@ jobs:
           TAG: "1.0.1"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          MESSGAE: "Job Status ${{ job.status }} \nworkflow /n ${{ github.workflow }}"
+          MESSGAE: "Job Status ${{ job.status }} workflow  ${{ github.workflow }}"  
           HEADER: "Header Job Status ${{ job.status }}"
           build_tag: "test_tag"
