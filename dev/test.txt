@@ -1,0 +1,4 @@
+ awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}'  report.txt
+
+
+ sh "awk '{printf \"%-30s|%-18s|%-20s\\n\",$1,$2,$3}'  report.txt"
