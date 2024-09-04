@@ -31,9 +31,12 @@ jobs:
       - name: Run a one-line script
         run: |
           echo Hello, world!
+          ls -la
+          echo "end"
 
       - name: stale
-        uses: basivireddy/github-actions-common/stale@main
+#        uses: basivireddy/github-actions-common/stale@main
+        uses: ./.github/workflows/actions/stale
         with:
           repo_name: "MusicBox"
         
