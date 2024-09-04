@@ -25,6 +25,6 @@ runs:
           echo "hi"
           ls -la
 
-    - run: bash s-b.sh "${{ inputs.repo_name }}"
+    - run: bash ./.github/workflows/actions/stale/s-b.sh "${{ inputs.repo_name }}"
       shell: bash
       
