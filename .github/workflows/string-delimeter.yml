@@ -12,6 +12,12 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      names:
+        type: string
+        default: 'a,b'
+        required: true
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -28,14 +34,14 @@ jobs:
            fetch-depth: 0
 
       # Runs a single command using the runners shell
-#      - name: Run a one-line script
-#        run: echo Hello, world!
+      - name: Run a one-line script
+        run: echo Hello, world!
 
       # Runs a set of commands using the runners shell
-#      - name: Run a multi-line script
-#        run: |
-#          echo Add other actions to build,
-#          echo test, and deploy your project.
+      - name: Run a multi-line script
+        run: |
+          echo Add other actions to build,
+          echo "${{ github.event.inputs.names }}
           
 #      - name: package-version
      #   run: echo "package-version={value}" >> $GITHUB_STATE
