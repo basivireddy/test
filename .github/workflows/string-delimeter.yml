@@ -40,8 +40,9 @@ jobs:
         run: |
           echo Add other actions to build,
           echo "${{ github.event.inputs.names }}"
-          ls -la
-          ls -al ../
+          echo "ls -la MusicBox"
+          ls -la MusicBox
+
         
           
 #      - name: package-version
