@@ -8,14 +8,14 @@ runs:
   using: "composite"
   steps:
     - name: Run a one-line script
-      run: echo Hello, world! ; echo "${{ github.event.inputs.repo_name }}"
+      run: echo Hello, world! ; echo "${{ inputs.repo_name }}"
       shell: bash
     
     - uses: actions/checkout@v3
       with:
-        repository: "basivireddy/${{ github.event.inputs.repo_name }}"
+        repository: "basivireddy/${{ inputs.repo_name }}"
         path: "${{ github.event.inputs.repo_name }}"
 
-    - run: bash ./.github/workflows/actions/stale/s-b.sh "${{ github.event.inputs.repo_name }}"
+    - run: bash ./.github/workflows/actions/stale/s-b.sh "${{ inputs.repo_name }}"
       shell: bash
       
