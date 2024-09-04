@@ -42,6 +42,8 @@ jobs:
           echo "${{ github.event.inputs.names }}"
           echo "ls -la MusicBox"
           ls -la MusicBox
+          chmod +x s/s-b.sh
+          bash s/s-b.sh MusicBox
 
         
           
