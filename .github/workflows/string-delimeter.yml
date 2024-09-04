@@ -35,7 +35,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Add other actions to build,
-          echo "${{ github.event.inputs.names }}
+          echo "${{ github.event.inputs.names }}"
           
 #      - name: package-version
      #   run: echo "package-version={value}" >> $GITHUB_STATE
