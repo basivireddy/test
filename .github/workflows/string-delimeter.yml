@@ -31,11 +31,18 @@ jobs:
       - name: Run a one-line script
         run: echo Hello, world!
 
+      - uses: actions/checkout@v3
+        with:
+          repository: 'basivireddy/MusicBox'
+          path: "MusicBox"
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
           echo Add other actions to build,
           echo "${{ github.event.inputs.names }}"
+          ls -la
+          ls -al ../
+        
           
 #      - name: package-version
      #   run: echo "package-version={value}" >> $GITHUB_STATE
