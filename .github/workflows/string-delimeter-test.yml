@@ -33,7 +33,7 @@ jobs:
           echo Hello, world!
 
       - name: stale
-        uses: ./.github/workflows/actions/stale
+        uses: basivireddy/github-actions-common/stale@main
         with:
           repo_name: "MusicBox"
         
