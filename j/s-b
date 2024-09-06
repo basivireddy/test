@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    parameters {
+    string(name: 'STATEMENT', defaultValue: 'test,terraform', description: 'What should I say?')
+  }
+  
+    stages {
+        stage('Process CSV') {
+            steps {
+                script {
+                    // Define your comma-separated string
+                    def csvString = params.STATEMENT
+                    
+                    // Split the string into a list
+                    def values = csvString.split(',')
+                    
+                    // Print each value
+                    values.each { value ->
+                        echo "Value: ${value}"
+                        dir(value){
+                            git branch: 'main' , url: "https://github.com/basivireddy/${value}.git"
+                        }
+                      //  sh "ls -la ${value}"
+                      sh "chmod + ../s/s-b.sh"
+                      sh "chmod + ../s/s-b.sh  ${value} > stale-branch-${value}.csv"
+                      
+                    }
+                }
+            }
+        }
+
+        stage(notification){
+        steps {
+           archiveArtifacts:"*.csv"
+        
+        }
+        }
+    }
+}
