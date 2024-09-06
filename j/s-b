@@ -31,7 +31,7 @@ pipeline {
 
         stage(notification){
         steps {
-           archiveArtifacts:"*.csv"
+           archiveArtifacts artifacts: '*.csv', fingerprint: true
         
         }
         }
