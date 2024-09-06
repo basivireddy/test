@@ -13,6 +13,8 @@ pipeline {
                     
                     // Split the string into a list
                     def values = csvString.split(',')
+                    sh "ls -la"
+                    sh "chmod +x s/s-b.sh"
                     
                     // Print each value
                     values.each { value ->
@@ -21,8 +23,8 @@ pipeline {
                             git branch: 'main' , url: "https://github.com/basivireddy/${value}.git"
                         }
                       //  sh "ls -la ${value}"
-                      sh "chmod + ../s/s-b.sh"
-                      sh "chmod + ../s/s-b.sh  ${value} > stale-branch-${value}.csv"
+                      
+                      sh "bash s/s-b.sh  ${value} > stale-branch-${value}.csv"
                       
                     }
                 }
