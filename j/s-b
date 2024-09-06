@@ -13,7 +13,8 @@ pipeline {
                     
                     // Split the string into a list
                     def values = csvString.split(',')
-                    sh "ls -la"
+                    env.message = ""
+                   // sh "ls -la"
                     sh "chmod +x s/s-b.sh"
                     
                     // Print each value
@@ -25,7 +26,8 @@ pipeline {
                       //  sh "ls -la ${value}"
                       
                       sh "bash s/s-b.sh  ${value} > stale-branch-${value}.csv"
-                      
+                      def files = findFiles(glob: "stale-branch-${value}.csv")
+                      env.message = env.message + "${files[0].name} have stale branch : ${files[0].length} \n"
                     }
                 }
             }
@@ -34,6 +36,7 @@ pipeline {
         stage(notification){
         steps {
            archiveArtifacts artifacts: '*.csv', fingerprint: true
+           echo "${env.message}"
         
         }
         }

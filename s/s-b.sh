@@ -26,7 +26,7 @@ cd $root
 
 echo "below branches have last commit before ${cutoffDate} date"
 git branch --no-abbrev -a | sed 's/\*//' | sed 's/->//' | sed 's/ //' | grep -v '/HEAD' | while read br; do
-    git log --date=iso -n 1 "$br" >/tmp/$$.gc2 2>/dev/null
+    git log --date=iso -n 1 "$br" | grep -v "Merge:" >/tmp/$$.gc2 2>/dev/null
     dayte=`head -3 /tmp/$$.gc2 | tail -1 | awk '{ print $2}'`
     auth=`head -2 /tmp/$$.gc2 | tail -1 | awk '{ $1=""; print $0; }'`
 
