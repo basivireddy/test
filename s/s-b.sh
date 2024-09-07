@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 
 cutoffInterval="-2 day"
 cutoffDate=`date -I --date="${cutoffInterval}"`
