@@ -26,8 +26,8 @@ pipeline {
                       //  sh "ls -la ${value}"
                       
                       sh "bash s/s-b.sh  ${value} > stale-branch-${value}.csv"
-                      def files = findFiles(glob: "stale-branch-${value}.csv")
-                      env.message = env.message + "${files[0].name} have stale branch : ${files[0].length} \n"
+                      line_count = sh(returnStdout: true, script: "tail -n +2 stale-branch-${value}.csv | wc -l").trim()
+                      env.message = env.message + "${value} repo have ${line_count} stale branches /n"
                     }
                 }
             }
