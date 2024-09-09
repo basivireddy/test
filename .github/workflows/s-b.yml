@@ -10,7 +10,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      repos: ${{ steps.vars.outputs.repo_list }}
+      repo_list: ${{ steps.vars.outputs.repo_list }}
     steps:
       - name: Create an array of repositories
         id: vars
@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        repo: ${{ fromJson(needs.setup.outputs.repos) }}
+        repo: ${{ fromJson(needs.setup.outputs.repo_list) }}
     steps:
     - name: build project ${{ matrix.repo }}
       run: echo "project=${{ matrix.repo }}" 
