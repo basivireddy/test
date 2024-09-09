@@ -10,7 +10,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      projects: ${{ steps.vars.outputs.repo_list }}
+      repos: ${{ steps.vars.outputs.repo_list }}
     steps:
       - name: Create an array of repositories
         id: vars
