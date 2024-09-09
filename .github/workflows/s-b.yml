@@ -1,4 +1,4 @@
-name: Manual workflow
+name: S B
 on:
   workflow_dispatch:
     inputs:
@@ -20,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
         project: ${{ fromJson(needs.setup.outputs.repos) }}
     steps:
     - name: build project ${{ matrix.repo }}
