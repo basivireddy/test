@@ -1,0 +1,33 @@
+name: Manual workflow
+on:
+  workflow_dispatch:
+    inputs:
+      repos:
+        required: true
+        default: "test,terraform"
+        type: string # like repo1,repo2,repo3
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.vars.outputs.repo_list }}
+    steps:
+      - name: Create an array of repositories
+        id: vars
+        run: echo "::set-output name=repo_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.repos }}'))"
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        project: ${{ fromJson(needs.setup.outputs.repos) }}
+    steps:
+    - name: build project ${{ matrix.repo }}
+      run: echo "project=${{ matrix.repo }}" 
+
+    - name: stale ${{ matrix.repo }}
+      #        uses: basivireddy/github-actions-common/stale@main
+      uses: ./.github/workflows/actions/stale
+      with:
+        repo_name: "${{ matrix.repo }}"
