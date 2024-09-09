@@ -23,7 +23,12 @@ jobs:
         repo: ${{ fromJson(needs.setup.outputs.repo_list) }}
     steps:
     - name: build project ${{ matrix.repo }}
-      run: echo "project=${{ matrix.repo }}" 
+      run: echo "project=${{ matrix.repo }}"
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: stale ${{ matrix.repo }}
       #        uses: basivireddy/github-actions-common/stale@main
