@@ -1,0 +1,26 @@
+name: Manual workflow
+on:
+  workflow_dispatch:
+    inputs:
+      projects:
+        required: true
+        type: string # like project1,project2,project3
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      projects: ${{ steps.vars.outputs.project_list }}
+    steps:
+      - name: Create an array of projects
+        id: vars
+        run: echo "::set-output name=project_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.projects }}'))"
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+        project: ${{ fromJson(needs.setup.outputs.projects) }}
+    steps:
+    - name: build project ${{ matrix.project }}
+      run: echo "project=${{ matrix.project }}" 
