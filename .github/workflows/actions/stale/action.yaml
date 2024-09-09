@@ -13,6 +13,6 @@ runs:
         repository: "basivireddy/${{ inputs.repo_name }}"
         path: "${{ inputs.repo_name }}"
         
-    - run: bash ./.github/workflows/actions/stale/s-b.sh "${{ inputs.repo_name }}" > stale-barnches-"${{ inputs.repo_name }}".csv
+    - run: bash ./.github/workflows/actions/stale/s-b.sh "${{ inputs.repo_name }}" > stale-barnches-${{ inputs.repo_name }}.csv
       shell: bash
       
