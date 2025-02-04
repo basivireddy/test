@@ -30,7 +30,7 @@ def invoke_lambda_via_alb(**kwargs):
         "key2": "value2"
     }
     
-    response = requests.post(alb_url, json=payload, headers=headers)
+    response = requests.post(alb_url, json=payload, headers=headers, verify=False)  # disable ssl
     
     print("Response Status Code:", response.status_code)
     print("Response Body:", response.text)
