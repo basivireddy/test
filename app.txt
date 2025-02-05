@@ -1,0 +1,1 @@
+oc get secret <secret-name> -n <namespace> -o=jsonpath='{.data.token}' | base64 -d
