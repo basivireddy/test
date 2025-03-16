@@ -1,0 +1,28 @@
+
+
+
+skopeo copy --src-creds user1:password1 --dest-creds user2:password2 \
+    docker://source-artifactory.example.com/repository/image:tag \
+    docker://destination-artifactory.example.com/repository/image:tag
+
+
+
+withCredentials([usernamePassword(credentialsId: 'artifactory-credentials', usernameVariable: 'SRC_USER', passwordVariable: 'SRC_PASS')]) {
+    sh """
+    skopeo copy --src-creds ${SRC_USER}:${SRC_PASS} --dest-creds ${SRC_USER}:${SRC_PASS} \
+        docker://${SRC_ARTIFACTORY}/${IMAGE_NAME}:${IMAGE_TAG} \
+        docker://${DEST_ARTIFACTORY}/${IMAGE_NAME}:${IMAGE_TAG} --src-tls-verify=false --dest-tls-verify=false
+    """
+}
+
+
+
+-----------------
+stage('Install Skopeo') {
+    steps {
+        sh 'sudo apt-get update && sudo apt-get install -y skopeo'
+    }
+}
+
+
+skopeo --version
