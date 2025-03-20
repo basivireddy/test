@@ -1,31 +1,55 @@
 import boto3
 import json
+import os
 
 # Create SQS client
-sqs = boto3.client('sqs', region_name='us-east-1')  # Change region if needed
+sqs = boto3.client('sqs', region_name="us-east-1")  # Change region if needed
 
-# Replace with your queue URL
-QUEUE_URL = "https://sqs.us-east-1.amazonaws.com/123456789012/MyQueue"
+# Set your SQS Queue URL
+QUEUE_URL = os.environ.get("SQS_QUEUE_URL", "https://sqs.us-east-1.amazonaws.com/123456789012/MyQueue")
 
-def read_messages():
-    response = sqs.receive_message(
+def lambda_handler(event, context):
+    message_body = {
+        "order_id": "12345",
+        "status": "pending",
+        "customer": "John Doe"
+    }
+
+    # Send message to SQS
+    response = sqs.send_message(
         QueueUrl=QUEUE_URL,
-        MaxNumberOfMessages=10,  # Read up to 10 messages at a time
-        WaitTimeSeconds=10  # Long polling to reduce empty responses
+        MessageBody=json.dumps(message_body)
     )
 
-    if 'Messages' in response:
-        for message in response['Messages']:
-            print("Message Body:", message['Body'])
+    print(response)
+    print("Message Sent! MessageId:", response["MessageId"])
 
-            # Delete the message after processing
+
+    read_response = sqs.receive_message(
+        QueueUrl=QUEUE_URL,
+        MaxNumberOfMessages=5,  # Get up to 5 messages
+        WaitTimeSeconds=10  # Long polling
+    )
+
+    if "Messages" in read_response:
+        for message in read_response["Messages"]:
+            print("Received message:", message["Body"])
+
+            # Process message logic goes here
+
+            # Delete message from queue after processing
             sqs.delete_message(
                 QueueUrl=QUEUE_URL,
-                ReceiptHandle=message['ReceiptHandle']
+                ReceiptHandle=message["ReceiptHandle"]
             )
             print("Message deleted\n")
     else:
         print("No messages in queue")
+        
+    return {
+        "statusCode": 200,
+        "body": json.dumps("Message sent to SQS!")
+    }
 
-# Run the function
-read_messages()
+
+
