@@ -1,0 +1,4 @@
+for branch in $(git branch -r | grep 'origin/feature/' | sed 's/origin\///'); do
+    git checkout $branch
+    git pull origin $branch
+done
