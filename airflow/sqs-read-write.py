@@ -9,6 +9,14 @@ sqs = boto3.client('sqs', region_name="us-east-1")  # Change region if needed
 QUEUE_URL = os.environ.get("SQS_QUEUE_URL", "https://sqs.us-east-1.amazonaws.com/123456789012/MyQueue")
 
 def lambda_handler(event, context):
+
+    response = sqs.get_queue_attributes(
+    QueueUrl=queue_url,
+    AttributeNames=["ApproximateNumberOfMessagesNotVisible"]
+    )
+    in_flight_count = response["Attributes"]["ApproximateNumberOfMessagesNotVisible"]
+    print(f"Messages in flight: {in_flight_count}")
+    
     message_body = {
         "order_id": "12345",
         "status": "pending",
