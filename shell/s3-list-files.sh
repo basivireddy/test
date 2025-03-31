@@ -56,7 +56,7 @@ echo "Transferring files to SFTP..."
 for LOCAL_FILE in "$LOCAL_DIR"/*; do
     if [ -f "$LOCAL_FILE" ]; then
         echo "Uploading $LOCAL_FILE to SFTP..."
-        scp -i "$SSH_KEY" "$LOCAL_FILE" "$SFTP_USER@$SFTP_HOST:$SFTP_DEST_DIR"
+        scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i "$SSH_KEY" "$LOCAL_FILE" "$SFTP_USER@$SFTP_HOST:$SFTP_DEST_DIR"
     fi
 done
 
