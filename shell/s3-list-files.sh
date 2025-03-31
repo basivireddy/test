@@ -3,6 +3,11 @@
 # Set your S3 bucket and folder
 BUCKET_NAME="your-bucket-name"
 FOLDER_PREFIX="your-folder-name/"  # Ensure it ends with a slash
+# Store current date in a variable
+CURRENT_DATE=$(date +%Y%m%d)
+
+# Print the date
+echo "Today's date: $CURRENT_DATE"
 
 # List all files in the S3 folder
 FILES=$(aws s3 ls "s3://$BUCKET_NAME/$FOLDER_PREFIX" --recursive | awk '{print $4}')
