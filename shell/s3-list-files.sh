@@ -39,6 +39,25 @@ SFTP_DEST_DIR="/remote/sftp/path/"  # Target directory on SFTP
 # Ensure local directory exists
 mkdir -p "$LOCAL_DIR"
 
+
+#ssh-keyscan -H $SFTP_HOST >> ~/.ssh/known_hosts 2>/dev/null
+
+# Define SFTP host
+SFTP_HOST="sftp.example.com"
+
+# Known hosts file
+KNOWN_HOSTS_FILE="$HOME/.ssh/known_hosts"
+
+# Check if the host is already in known_hosts
+if ssh-keygen -F "$SFTP_HOST" > /dev/null; then
+    echo "✅ Host $SFTP_HOST is already in known_hosts."
+else
+    echo "⚠️  Host $SFTP_HOST not found in known_hosts. Adding now..."
+    ssh-keyscan -H "$SFTP_HOST" >> "$KNOWN_HOSTS_FILE"
+    echo "✅ Host $SFTP_HOST has been added to known_hosts."
+fi
+
+
 # Loop through dictionary keys & values
 echo "list files and count"
 for key in "${!files_dict[@]}"; do
