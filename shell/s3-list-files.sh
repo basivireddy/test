@@ -26,11 +26,37 @@ for FILE in $FILES; do
     files_dict[$FILE]= $LINE_COUNT
 done
 
+LOCAL_DIR="/tmp/s3_files"
+SFTP_HOST="sftp.example.com"
+SFTP_USER="your_sftp_username"
+SSH_KEY="~/.ssh/id_rsa"  # Path to SSH private key
+SFTP_DEST_DIR="/remote/sftp/path/"  # Target directory on SFTP
+# Ensure local directory exists
+mkdir -p "$LOCAL_DIR"
 
 # Loop through dictionary keys & values
 echo "list files and count"
 for key in "${!files_dict[@]}"; do
     echo "$key: ${files_dict[$key]}"
+    # "Downloading files from S3..."
+    if [[ "${files_dict[$key]}" -gt "20000" ]]; then
+       aws s3 cp "s3://$BUCKET_NAME/$key" "$LOCAL_DIR/"
+    fi
+    
 done
+
+
+
+echo "Transferring files to SFTP..."
+for LOCAL_FILE in "$LOCAL_DIR"/*; do
+    if [ -f "$LOCAL_FILE" ]; then
+        echo "Uploading $LOCAL_FILE to SFTP..."
+        scp -i "$SSH_KEY" "$LOCAL_FILE" "$SFTP_USER@$SFTP_HOST:$SFTP_DEST_DIR"
+    fi
+done
+
+# Cleanup local directory
+rm -rf "$LOCAL_DIR"
+echo "Transfer completed!"
 
 return files_dict
