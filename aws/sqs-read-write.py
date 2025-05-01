@@ -11,7 +11,7 @@ QUEUE_URL = os.environ.get("SQS_QUEUE_URL", "https://sqs.us-east-1.amazonaws.com
 def lambda_handler(event, context):
 
     response = sqs.get_queue_attributes(
-    QueueUrl=queue_url,
+    QueueUrl=QUEUE_URL,
     AttributeNames=["ApproximateNumberOfMessagesNotVisible"]
     )
     in_flight_count = response["Attributes"]["ApproximateNumberOfMessagesNotVisible"]
