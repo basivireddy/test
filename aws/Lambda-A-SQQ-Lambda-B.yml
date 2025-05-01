@@ -1,0 +1,137 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda A sends to SQS -> SQS triggers Lambda B
+
+Resources:
+  # SQS Queue
+  MyQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: my-sqs-queue
+
+  # IAM Role for Lambda A (Sender)
+  LambdaARole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lambda-a-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaASendSQSPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                Resource: !GetAtt MyQueue.Arn
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+
+  # Lambda A (Sender)
+  LambdaA:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: lambda-a-sender
+      Runtime: python3.12
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaARole.Arn
+      Code:
+        ZipFile: |
+          import boto3
+          import os
+
+          sqs = boto3.client('sqs')
+          QUEUE_URL = os.environ['QUEUE_URL']
+
+          def lambda_handler(event, context):
+              response = sqs.send_message(
+                  QueueUrl=QUEUE_URL,
+                  MessageBody='Hello from Lambda A!',
+                  DelaySeconds=60
+              )
+              return {
+                  'statusCode': 200,
+                  'body': f'Message sent to SQS. MessageId: {response["MessageId"]}'
+              }
+      Environment:
+        Variables:
+          QUEUE_URL: !Ref MyQueue
+
+  # IAM Role for Lambda B (Receiver)
+  LambdaBRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lambda-b-role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaBLogsPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - sqs:ReceiveMessage
+                  - sqs:DeleteMessage
+                  - sqs:GetQueueAttributes
+                Resource: !GetAtt MyQueue.Arn
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: "*"
+
+  # Lambda B (Receiver)
+  LambdaB:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: lambda-b-receiver
+      Runtime: python3.12
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaBRole.Arn
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+              for record in event['Records']:
+                  body = record['body']
+                  print(f'Received message from SQS: {body}')
+              return {
+                  'statusCode': 200,
+                  'body': 'Messages processed.'
+              }
+
+  # SQS -> Lambda B trigger (Event Source Mapping)
+  SQSTriggerLambdaB:
+    Type: AWS::Lambda::EventSourceMapping
+    Properties:
+      BatchSize: 1
+      EventSourceArn: !GetAtt MyQueue.Arn
+      FunctionName: !GetAtt LambdaB.Arn
+
+Outputs:
+  LambdaAFunction:
+    Description: Lambda A function name
+    Value: !Ref LambdaA
+
+  LambdaBFunction:
+    Description: Lambda B function name
+    Value: !Ref LambdaB
+
+  SQSQueueURL:
+    Description: SQS Queue URL
+    Value: !Ref MyQueue
