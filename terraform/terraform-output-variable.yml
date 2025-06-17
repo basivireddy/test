@@ -1,0 +1,42 @@
+stages:
+  - deploy
+  - app_deploy
+
+terraform_deploy:
+  stage: deploy
+  image:
+    name: hashicorp/terraform:latest # Or your custom image with Terraform
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  script:
+    - terraform init
+    - terraform apply -auto-approve
+    
+    # Capture the output and save it to a temporary file
+    - terraform output -json > tf_outputs.json
+
+    # Parse the JSON and export to GitLab CI/CD variables
+    - |
+      # For a single output (e.g., 'my_instance_ip')
+      INSTANCE_IP=$(jq -r '.my_instance_ip.value' tf_outputs.json)
+      echo "INSTANCE_IP=$INSTANCE_IP" >> variables.env
+      
+      # For another output (e.g., 'my_s3_bucket_name')
+      S3_BUCKET_NAME=$(jq -r '.my_s3_bucket_name.value' tf_outputs.json)
+      echo "S3_BUCKET_NAME=$S3_BUCKET_NAME" >> variables.env
+
+  artifacts:
+    reports:
+      dotenv: variables.env # This tells GitLab to load variables from variables.env
+
+app_deployment:
+  stage: app_deploy
+  image: docker:latest # Or your application deployment image
+  needs:
+    - job: terraform_deploy # Ensures this job runs after terraform_deploy
+      artifacts: true # Ensures variables.env artifact is passed
+  script:
+    - echo "Deploying application to IP: $INSTANCE_IP"
+    - echo "Using S3 bucket: $S3_BUCKET_NAME"
+    # Your application deployment commands using $INSTANCE_IP and $S3_BUCKET_NAME
