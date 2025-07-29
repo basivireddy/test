@@ -1,4 +1,5 @@
-``` graph TD
+```mermaid
+graph TD
     A[Terraform Configuration] --> B[aws_lb "my_alb"<br>ALB Resource]
     B --> C[Attach to Subnets<br>(public/private)]
     B --> D[Associate Security Group]
