@@ -2,7 +2,7 @@
 graph TD;
     A[Terraform Configuration] --> B[google_compute_global_address<br>External IP]
 
-    B --> C[google_compute_target_http_proxy<br>HTTP(S) Proxy]
+    B --> C[google_compute_target_http_proxy<br>HTTPS Proxy]
     C --> D[google_compute_url_map<br>Routing Rules]
 
     D --> E1[google_compute_backend_service blue]
