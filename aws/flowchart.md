@@ -2,8 +2,8 @@
 graph TD;
     A[Terraform Configuration] --> B[aws_lb<br>Application Load Balancer]
 
-    B --> C1[aws_lb_target_group "blue"]
-    B --> C2[aws_lb_target_group "green"]
+    B --> C1[aws_lb_target_group blue]
+    B --> C2[aws_lb_target_group green]
 
     C1 --> D1[EC2 / ECS Blue Instances]
     C2 --> D2[EC2 / ECS Green Instances]
