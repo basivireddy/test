@@ -1,25 +1,22 @@
 ```mermaid
 graph TD;
-    A[Terraform Configuration] --> B[aws_lb<br>Application Load Balancer]
+    A[Terraform Configuration] --> B[google_compute_global_address<br>External IP]
 
-    B --> C1[aws_lb_target_group blue]
-    B --> C2[aws_lb_target_group green]
+    B --> C[google_compute_target_http_proxy<br>HTTP(S) Proxy]
+    C --> D[google_compute_url_map<br>Routing Rules]
 
-    C1 --> D1[EC2 / ECS Blue Instances]
-    C2 --> D2[EC2 / ECS Green Instances]
+    D --> E1[google_compute_backend_service blue]
+    D --> E2[google_compute_backend_service green]
 
-    B --> E[aws_lb_listener<br>Listens on Port 80/443]
-    E --> F[aws_lb_listener_rule<br>Route traffic based on weights or path]
+    E1 --> F1[Instance Group / NEG Blue]
+    E2 --> F2[Instance Group / NEG Green]
 
-    F --> G1[Forward to blue or green target group]
+    D --> G[google_compute_forwarding_rule<br>Points to target proxy]
 
-    G1 --> C1
-    G1 --> C2
-
-    subgraph "Deployment Control"
-        H[Switch Traffic via Terraform<br>or DNS update]
+    subgraph "Deployment Strategy"
+        H[Switch traffic to blue or green<br>via Terraform updates to URL Map]
     end
 
-    H --> F
+    H --> D
 
 ```
