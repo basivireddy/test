@@ -1,0 +1,77 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda with EventBridge trigger every hour
+
+Resources:
+
+  # IAM Role for Lambda
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: HourlyLambdaExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: LambdaBasicExecution
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: arn:aws:logs:*:*:*
+
+  # Lambda Function
+  HourlyLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: HourlyLambda
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Runtime: python3.9
+      Code:
+        ZipFile: |
+          import json
+          from datetime import datetime
+
+          def lambda_handler(event, context):
+              current_time = datetime.utcnow().isoformat()
+              print(f"Lambda triggered at {current_time}")
+              return {
+                  'statusCode': 200,
+                  'body': json.dumps('Success!')
+              }
+
+  # EventBridge Rule
+  HourlyEventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: HourlyLambdaTrigger
+      ScheduleExpression: rate(1 hour)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt HourlyLambdaFunction.Arn
+          Id: "HourlyLambdaTarget"
+
+  # Permission for EventBridge to invoke Lambda
+  LambdaPermissionForEventBridge:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref HourlyLambdaFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt HourlyEventRule.Arn
+
+Outputs:
+  LambdaFunctionName:
+    Description: "Name of the Lambda Function"
+    Value: !Ref HourlyLambdaFunction
+  EventRuleName:
+    Description: "EventBridge Rule Name"
+    Value: !Ref HourlyEventRule
