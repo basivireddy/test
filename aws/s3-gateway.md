@@ -2,6 +2,7 @@ Got it — you want to check via Python if S3 traffic is going through the VPC G
 
 Here’s a minimal example using boto3 + socket to see if the resolved S3 hostname is private (VPC endpoint) or public (proxy/NAT):
 
+```py
 import boto3
 import socket
 import ipaddress
@@ -27,7 +28,7 @@ if is_private:
 else:
     print("⚠ Traffic is going through public network (proxy/NAT).")
 
-
+```
 ⸻
 
 How this works
