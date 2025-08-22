@@ -6,12 +6,18 @@ Here’s a minimal example using boto3 + socket to see if the resolved S3 hostna
 import boto3
 import socket
 import ipaddress
+import os
+from botocore.config import Config
 
 # Your AWS region
 REGION = "us-east-1"
-
+os.environ['NO_PROXY'] = '.amazonaws.com'
+os.environ['no_proxy'] = '.amazonaws.com'  # lowercase for some systems
+os.environ['NO_PROXY'] = 's3.us-east-1.amazonaws.com'
+# This completely disables proxy usage for the client
+config = Config(proxies={})
 # Create an S3 client
-s3 = boto3.client("s3", region_name=REGION)
+s3 = boto3.client("s3", region_name=REGION, config=config)
 
 # The standard S3 endpoint hostname
 hostname = f"s3.{REGION}.amazonaws.com"
